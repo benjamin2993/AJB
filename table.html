@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Periodic Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        #periodic-table {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 2px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .element {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .element:hover {
+            transform: scale(1.1);
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        .element .symbol {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .element .atomic-number {
+            font-size: 0.8em;
+        }
+        #element-info {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .noble-gas { background-color: #FFBCD9; }
+        .alkali-metal { background-color: #FF6961; }
+        .alkaline-earth-metal { background-color: #FDFD96; }
+        .transition-metal { background-color: #77DD77; }
+        .post-transition-metal { background-color: #AEC6CF; }
+        .metalloid { background-color: #CFB997; }
+        .nonmetal { background-color: #B19CD9; }
+        .halogen { background-color: #F49AC2; }
+        .lanthanide { background-color: #FFD1DC; }
+        .actinide { background-color: #CFCFC4; }
+        #lanthanides-actinides {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 2px;
+            max-width: 1200px;
+            margin: 20px auto 0;
+        }
+        .spacer {
+            grid-column: span 3;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="periodic-table"></div>
+    <div id="lanthanides-actinides"></div>
+    <div id="element-info"></div>
+    <audio id="audio-player" controls style="display: none;"></audio> <!-- Hidden audio player -->
+
+    <script>
+        let elements = [];
+
+        async function fetchElements() {
+            try {
+                const response = await fetch('./elements.json'); // Fetch the local JSON file
+                elements = await response.json();
+                renderPeriodicTable();
+            } catch (error) {
+                console.error('Error fetching elements:', error);
+            }
+        }
+
+        function renderPeriodicTable() {
+            const table = document.getElementById('periodic-table');
+            const lanthanideActinideTable = document.getElementById('lanthanides-actinides');
+            
+            elements.forEach(element => {
+                const el = document.createElement('div');
+                el.className = `element ${getElementClass(element)}`;
+                el.innerHTML = `
+                    <div class="atomic-number">${element.atomic_no}</div>
+                    <div class="symbol">${element.symbol}</div>
+                `;
+                el.onclick = () => {
+                    showElementInfo(element);
+                    playPronunciation(element.name);
+                };
+
+                if (element.atomic_no >= 57 && element.atomic_no <= 71) {
+                    // Lanthanides
+                    el.style.gridColumn = element.atomic_no - 56;
+                    el.style.gridRow = '1';
+                    lanthanideActinideTable.appendChild(el);
+                } else if (element.atomic_no >= 89 && element.atomic_no <= 103) {
+                    // Actinides
+                    el.style.gridColumn = element.atomic_no - 88;
+                    el.style.gridRow = '2';
+                    lanthanideActinideTable.appendChild(el);
+                } else {
+                    el.style.gridColumn = element.group_no;
+                    el.style.gridRow = element.period_no;
+                    table.appendChild(el);
+                }
+            });
+
+            // Add spacers for lanthanides and actinides in the main table
+            const spacer1 = document.createElement('div');
+            spacer1.className = 'element spacer';
+            spacer1.innerHTML = 'La-Lu';
+            spacer1.style.gridRow = '6';
+            spacer1.style.gridColumn = '3';
+            table.appendChild(spacer1);
+
+            const spacer2 = document.createElement('div');
+            spacer2.className = 'element spacer';
+            spacer2.innerHTML = 'Ac-Lr';
+            spacer2.style.gridRow = '7';
+            spacer2.style.gridColumn = '3';
+            table.appendChild(spacer2);
+        }
+
+        function getElementClass(element) {
+            if (element.noble === 1) return 'noble-gas';
+            if (element.group_no === 1) return 'alkali-metal';
+            if (element.group_no === 2) return 'alkaline-earth-metal';
+            if (element.group_no >= 3 && element.group_no <= 12) return 'transition-metal';
+            if ([13,14,15,16].includes(element.group_no)) return 'post-transition-metal';
+            if (element.group_no === 17) return 'halogen';
+            if (element.atomic_no >= 57 && element.atomic_no <= 71) return 'lanthanide';
+            if (element.atomic_no >= 89 && element.atomic_no <= 103) return 'actinide';
+            return 'nonmetal';
+        }
+
+        function showElementInfo(element) {
+            const infoDiv = document.getElementById('element-info');
+            infoDiv.innerHTML = `
+                <h2>${element.name} (${element.symbol})</h2>
+                <p>Atomic Number: ${element.atomic_no}</p>
+                <p>Atomic Mass: ${element.atomic_mass}</p>
+                <p>Group: ${element.group_no}</p>
+                <p>Period: ${element.period_no}</p>
+                <p>Color: ${element.color}</p>
+                <p>State: ${element.state}</p>
+                <p>Characteristics: ${element.characteristics}</p>
+                <p>Description: ${element.description || 'N/A'}</p>
+            `;
+        }
+
+        function playPronunciation(name) {
+            const audioPlayer = document.getElementById('audio-player');
+            audioPlayer.src = `./sounds/${name}.mp3`; // Assuming sounds are stored locally as well
+            audioPlayer.play().catch(error => console.error('Error playing sound:', error));
+        }
+
+        fetchElements();
+    </script>
+</body>
+</html>
