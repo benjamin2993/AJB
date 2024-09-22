@@ -136,9 +136,18 @@
 
     <script>
         fetch('anekshabd.json')
-  .then(response => response.json())
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+      return response.json();
+  })
   .then(quizData => {
-    // You can now use quizData for your quiz
+      // your quiz logic
+  })
+  .catch(error => {
+      console.error('Error fetching quiz data:', error);
+  });
         const totalQuestions = 20;
         let questionCount = 0;
         let score = 0;
