@@ -167,7 +167,7 @@
 
         function playPronunciation(name) {
             const audioPlayer = document.getElementById('audio-player');
-            audioPlayer.src = `./sounds/${name}.mp3`; // Assuming sounds are stored locally as well
+            audioPlayer.src = `sounds/${name}.mp3`; // Assuming sounds are stored locally as well
             audioPlayer.play().catch(error => console.error('Error playing sound:', error));
         }
 
