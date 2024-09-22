@@ -1,0 +1,2281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Periodic Table Quiz</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        nav {
+            background-color: #333;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav li {
+            margin: 0 20px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #ccc;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            margin: 20px auto;
+            box-sizing: border-box;
+        }
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #3498db;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .section {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        #progressBar {
+            width: 100%;
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        #progressFill {
+            height: 100%;
+            background-color: #2ecc71;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s ease-in-out;
+        }
+        #searchContainer {
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+        #searchButton {
+            width: 25%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #searchResults {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .searchResult {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .searchResult:hover {
+            background-color: #f0f0f0;
+        }
+        #randomButton {
+    width: 25%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+nav {
+    background-color: #2c3e50;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+nav li {
+    margin: 5px 15px;
+}
+
+nav a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #34495e;
+    color: #3498db;
+}
+
+@media (max-width: 768px) {
+    nav {
+        padding: 10px 0;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav li {
+        margin: 8px 0;
+    }
+
+    nav a {
+        display: block;
+        padding: 10px 20px;
+    }
+}
+
+@media (min-width: 769px) {
+    nav ul {
+        flex-wrap: nowrap;
+    }
+}
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/quiz">QUIZ</a></li>
+            <li><a href="/test">TABLE</a></li>
+            <li><a href="/leaderboard">LEADERBOARD</a></li>
+            <li><a href="/log">LOGIN</a></li>
+            
+        </ul>
+    </nav>
+    <div class="container">
+    
+        <h1>Advanced Periodic Table Quiz</h1>
+        <div id="searchContainer">
+            <input type="text" id="searchInput" placeholder="Search for an element...">
+            <button id="searchButton">Search</button>
+            <button id="randomButton">Random</button>
+            <div id="searchResults"></div>
+        </div>
+       
+        <div id="progressBar"><div id="progressFill"></div></div>
+        
+        <div id="section1" class="section">
+         <button id="backButton" style="display: inline;" onclick="showSearch()">Back</button>
+            <h2>Element Name</h2>
+            <p>What is the name of the element with the symbol <span id="symbolQuestion"></span>?</p>
+            <div id="nameOptions" class="options"></div>
+            <p id="error1" class="error"></p>
+           
+        </div>
+
+        <div id="section2" class="section">
+        <button id="backButton" style="display: inline;" onclick="showSearch()">Back</button>
+            <h2>Atomic Number</h2>
+            <p>What is the atomic number of <span id="nameQuestion"></span>?</p>
+            <div id="atomicNumberOptions" class="options"></div>
+            <p id="error2" class="error"></p>
+        </div>
+
+        <div id="section3" class="section">
+        <button id="backButton" style="display: inline;" onclick="showSearch()">Back</button>
+            <h2>Atomic Mass</h2>
+            <p>What is the atomic mass of <span id="nameQuestion2"></span>?</p>
+            <div id="atomicMassOptions" class="options"></div>
+            <p id="error3" class="error"></p>
+        </div>
+
+        <div id="section4" class="section">
+        <button id="backButton" style="display: inline;" onclick="showSearch()">Back</button>
+            <h2>Group and Period</h2>
+            <p>What are the group and period of <span id="nameQuestion3"></span>?</p>
+            <div id="groupPeriodOptions" class="options"></div>
+            <p id="error4" class="error"></p>
+        </div>
+
+        <div id="section5" class="section">
+        <button id="backButton" style="display: inline;" onclick="showSearch()">Back</button>
+            <h2>Characteristics</h2>
+            <p>What is the charaertistics of <span id="nameQuestion4"></span>?</p>
+            <div id="valencyOptions" class="options"></div>
+            <p id="error5" class="error"></p>
+        </div>
+
+        <div id="section6" class="section">
+            <h2>Quiz Complete!</h2>
+            <p>Congratulations! You've mastered the Periodic Table Quiz.</p>
+            <button onclick="showSearch()">Challenge Yourself Again</button>
+        </div>
+    </div>
+
+  <script>
+  
+        let currentElement = {};
+        let allElements = [
+    {
+        "symbol": "H",
+        "name": "Hydrogen",
+        "atomic_no": 1,
+        "atomic_mass": 1,
+        "block": "s",
+        "discovery": "Henry Cavendish",
+        "NameBy": "Antoine Lavoisier",
+        "Discovered in": 1766,
+        "group_no": 1,
+        "period_no": 1,
+        "color": "colorless",
+        "state": "gas",
+        "characteristics": "Lightest element, highly combustible, used in fuel cells and rocket fuel. Forms water when combined with oxygen.",
+        "noble": 0,
+        "classification": "Nonmetal",
+        "description": "Discovered by Henry Cavendish in 1766. Named by Antoine Lavoisier from Greek words meaning 'water-former'. It's the most abundant element in the universe."
+    },
+    {
+        "symbol": "He",
+        "name": "Helium",
+        "atomic_no": 2,
+        "atomic_mass": 4,
+        
+        "group_no": 18,
+        "period_no": 1,
+        "color": "colorless",
+        "state": "gas",
+        "characteristics": "Second lightest element, inert, used in balloons, as a coolant for superconducting magnets, and in cryogenic research.",
+        "noble": 1,
+        "classification": "Noble Gas",
+        "description": "First observed by Jules Janssen during a solar eclipse in 1868. Named after 'helios', the Greek word for sun. It was isolated on Earth by William Ramsay in 1895."
+    },
+    {
+        "symbol": "Li",
+        "name": "Lithium",
+        "atomic_no": 3,
+        "atomic_mass": 7,
+        
+        "group_no": 1,
+        "period_no": 2,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Lightest metal, highly reactive, used in rechargeable batteries, psychiatric medications, and nuclear fusion reactions.",
+        "noble": 0,
+        "classification": "Alkali Metal",
+        "description": "Discovered by Johan August Arfwedson in 1817. Named from 'lithos', Greek for stone. It's the lightest metal and the least dense solid element."
+    },
+    {
+        "symbol": "Be",
+        "name": "Beryllium",
+        "atomic_no": 4,
+        "atomic_mass": 9,
+        
+        "group_no": 2,
+        "period_no": 2,
+        "color": "grey",
+        "state": "solid",
+        "characteristics": "Low density, high melting point, used in aerospace materials, X-ray windows, and as a moderator in nuclear reactors.",
+        "noble": 0,
+        "classification": "Alkaline Earth Metal",
+        "description": "Discovered as a component of beryl by Louis Nicolas Vauquelin in 1798. Isolated in 1828 by Friedrich Wöhler and Antoine Bussy. Named after the mineral beryl."
+    },
+    {
+        "symbol": "B",
+        "name": "Boron",
+        "atomic_no": 5,
+        "atomic_mass": 11,
+        
+        "group_no": 13,
+        "period_no": 2,
+        "color": "black",
+        "state": "solid",
+        "characteristics": "Semiconductor, used in glass and ceramics, fiberglass insulation, and as a dopant for semiconductors.",
+        "noble": 0,
+        "classification": "Metalloid",
+        "description": "First isolated by Sir Humphry Davy, Gay-Lussac and Louis Jacques Thénard in 1808. Named from the Arabic 'buraq' and Persian 'burah' for borax."
+    },
+    {
+        "symbol": "C",
+        "name": "Carbon",
+        "atomic_no": 6,
+        "atomic_mass": 12,
+        
+        "group_no": 14,
+        "period_no": 2,
+        "color": "black",
+        "state": "solid",
+        "characteristics": "Basis of organic life, forms diverse compounds, used in steel production, nanotechnology, and as graphite in pencils.",
+        "noble": 0,
+        "classification": "Nonmetal",
+        "description": "Known since ancient times. Named from the Latin 'carbo' for charcoal. Antoine Lavoisier recognized it as an element in 1789."
+    },
+    {
+        "symbol": "N",
+        "name": "Nitrogen",
+        "atomic_no": 7,
+        "atomic_mass": 14,
+        
+        "group_no": 15,
+        "period_no": 2,
+        "color": "colorless",
+        "state": "gas",
+        "characteristics": "Makes up most of Earth's atmosphere, essential for protein synthesis, used in fertilizers and explosives.",
+        "noble": 0,
+        "classification": "Nonmetal",
+        "description": "Discovered by Daniel Rutherford in 1772. Named by Jean-Antoine Chaptal in 1790 from Greek words meaning 'forming niter'."
+    },
+    {
+        "symbol": "O",
+        "name": "Oxygen",
+        "atomic_no": 8,
+        "atomic_mass": 16,
+        
+        "group_no": 16,
+        "period_no": 2,
+        "color": "colorless",
+        "state": "gas",
+        "characteristics": "Essential for respiration, supports combustion, forms ozone in upper atmosphere, critical for most life forms.",
+        "noble": 0,
+        "classification": "Nonmetal",
+        "description": "Discovered by Carl Wilhelm Scheele in 1772 and independently by Joseph Priestley in 1774. Named by Antoine Lavoisier from Greek words meaning 'acid-former'."
+    },
+    {
+        "symbol": "F",
+        "name": "Fluorine",
+        "atomic_no": 9,
+        "atomic_mass": 19,
+        
+        "group_no": 17,
+        "period_no": 2,
+        "color": "pale yellow",
+        "state": "gas",
+        "characteristics": "Most electronegative element, highly reactive, used in toothpaste, non-stick coatings, and etching glass.",
+        "noble": 0,
+        "classification": "Halogen",
+        "description": "Isolated by Henri Moissan in 1886 after nearly 74 years of effort by other chemists. Named from the Latin 'fluere', meaning 'to flow'."
+    },
+    {
+        "symbol": "Ne",
+        "name": "Neon",
+        "atomic_no": 10,
+        "atomic_mass": 20,
+        
+        "group_no": 18,
+        "period_no": 2,
+        "color": "colorless",
+        "state": "gas",
+        "characteristics": "Inert gas, used in neon signs, lasers, and as a cryogenic refrigerant.",
+        "noble": 1,
+        "classification": "Noble Gas",
+        "description": "Discovered by Sir William Ramsay and Morris W. Travers in 1898. Named from the Greek 'neos', meaning 'new'."
+    },
+    {
+        "symbol": "Na",
+        "name": "Sodium",
+        "atomic_no": 11,
+        "atomic_mass": 23,
+        
+        "group_no": 1,
+        "period_no": 3,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Highly reactive metal, essential for nerve and muscle function, used in street lamps and chemical production.",
+        "noble": 0,
+        "classification": "Alkali Metal",
+        "description": "Isolated by Sir Humphry Davy in 1807 through the electrolysis of caustic soda. Name derived from 'soda', and the medieval Latin 'sodanum'."
+    },
+    {
+        "symbol": "Mg",
+        "name": "Magnesium",
+        "atomic_no": 12,
+        "atomic_mass": 24,
+        
+        "group_no": 2,
+        "period_no": 3,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Lightweight metal, essential for chlorophyll in plants, used in alloys, fireworks, and as a reducing agent.",
+        "noble": 0,
+        "classification": "Alkaline Earth Metal",
+        "description": "Isolated by Sir Humphry Davy in 1808. Named after the district of Magnesia in Greece, where the mineral magnesia alba was first found."
+    },
+    {
+        "symbol": "Al",
+        "name": "Aluminum",
+        "atomic_no": 13,
+        "atomic_mass": 27,
+        
+        "group_no": 13,
+        "period_no": 3,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Low density, corrosion-resistant, used in packaging, construction, transportation, and electrical transmission lines.",
+        "noble": 0,
+        "classification": "Post-transition Metal",
+        "description": "Ancient Egyptians and Babylonians used aluminum compounds in dyes and medicines. Isolated in 1824 by Hans Christian Ørsted. Named from 'alumen', Latin for alum."
+    },
+    {
+        "symbol": "Si",
+        "name": "Silicon",
+        "atomic_no": 14,
+        "atomic_mass": 28,
+        
+        "group_no": 14,
+        "period_no": 3,
+        "color": "grey",
+        "state": "solid",
+        "characteristics": "Semiconductor, second most abundant element in Earth's crust, used in electronics, solar cells, and silicones.",
+        "noble": 0,
+        "classification": "Metalloid",
+        "description": "Discovered by Jöns Jacob Berzelius in 1824. Named from the Latin 'silex' or 'silicis', meaning flint. It's the second most abundant element in the Earth's crust."
+    },
+    {
+        "symbol": "P",
+        "name": "Phosphorus",
+        "atomic_no": 15,
+        "atomic_mass": 31,
+        
+        "group_no": 15,
+        "period_no": 3,
+        "color": "white",
+        "state": "solid",
+        "characteristics": "Essential for DNA and RNA, used in fertilizers, detergents, and matches. Glows in the dark in some forms.",
+        "noble": 0,
+        "classification": "Nonmetal",
+        "description": "Discovered by Hennig Brand in 1669 by distilling urine. Named from the Greek 'phosphoros', meaning 'light-bearing', due to its glow in the dark."
+    },
+    {
+        "symbol": "S",
+        "name": "Sulfur",
+        "atomic_no": 16,
+        "atomic_mass": 32,
+        
+        "group_no": 16,
+        "period_no": 3,
+        "color": "yellow",
+        "state": "solid",
+        "characteristics": "Essential for life, used in sulfuric acid production, vulcanization of rubber, and in some medications.",
+        "noble": 0,
+        "classification": "Nonmetal",
+        "description": "Known since ancient times. Its name comes from the Latin 'sulphurium' and Sanskrit 'sulvere'. Recognized as an element by Antoine Lavoisier in 1777."
+    },
+    {
+        "symbol": "Cl",
+        "name": "Chlorine",
+        "atomic_no": 17,
+        "atomic_mass": 35.5,
+        
+        "group_no": 17,
+        "period_no": 3,
+        "color": "greenish-yellow",
+        "state": "gas",
+        "characteristics": "Highly reactive, used in water treatment, disinfectants, and production of many everyday products including PVC.",
+        "noble": 0,
+        "classification": "Halogen",
+        "description": "Discovered by Carl Wilhelm Scheele in 1774. Isolated by Sir Humphry Davy in 1810. Named from the Greek 'chloros', meaning 'pale green', due to its color."
+    },
+    {
+        "symbol": "Ar",
+        "name": "Argon",
+        "atomic_no": 18,
+        "atomic_mass": 40,
+        
+        "group_no": 18,
+        "period_no": 3,
+        "color": "colorless",
+        "state": "gas",
+        "characteristics": "Inert gas, used in welding, neon lights, and as a preservative for historical documents.",
+        "noble": 1,
+        "classification": "Noble Gas",
+        "description": "Discovered by Lord Rayleigh and Sir William Ramsay in 1894. Named from the Greek 'argos', meaning 'lazy' or 'inactive', due to its non-reactive nature."
+    },
+    {
+        "symbol": "K",
+        "name": "Potassium",
+        "atomic_no": 19,
+        "atomic_mass": 39,
+        
+        "group_no": 1,
+        "period_no": 4,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Highly reactive, essential for nerve function and plant growth, used in fertilizers and some types of glass.",
+        "noble": 0,
+        "classification": "Alkali Metal",
+        "description": "Isolated by Sir Humphry Davy in 1807 through electrolysis of caustic potash. Named from the English word 'potash', as it was obtained from wood ashes."
+    },
+    {
+        "symbol": "Ca",
+        "name": "Calcium",
+        "atomic_no": 20,
+        "atomic_mass": 40,
+        
+        "group_no": 2,
+        "period_no": 4,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Essential for bones and teeth, used in cement and mortar, important in cellular processes and muscle function.",
+        "noble": 0,
+        "classification": "Alkaline Earth Metal",
+        "description": "Known since ancient times as lime. Isolated by Sir Humphry Davy in 1808. Named from the Latin 'calx', meaning 'lime'."
+    }, 
+{
+        "symbol": "Sc",
+        "name": "Scandium",
+        "atomic_no": 21,
+        "atomic_mass": 45,
+        
+        "group_no": 3,
+        "period_no": 4,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in aerospace components, sports equipment, and LED lights.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Lars Fredrik Nilson in 1879. Named after Scandia, the Latin name for Scandinavia."
+    },
+    {
+        "symbol": "Ti",
+        "name": "Titanium",
+        "atomic_no": 22,
+        "atomic_mass": 48,
+        
+        "group_no": 4,
+        "period_no": 4,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Strong, lightweight metal, used in aerospace, medical implants, and pigments.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by William Gregor in 1791. Named after the Titans of Greek mythology."
+    },
+    {
+        "symbol": "V",
+        "name": "Vanadium",
+        "atomic_no": 23,
+        "atomic_mass": 51,
+        
+        "group_no": 5,
+        "period_no": 4,
+        "color": "steel-gray",
+        "state": "solid",
+        "characteristics": "Used in steel alloys and batteries, known for its strength and corrosion resistance.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Andrés Manuel del Río in 1801. Named after Vanadis, another name for the Norse goddess Freyja."
+    },
+    {
+        "symbol": "Cr",
+        "name": "Chromium",
+        "atomic_no": 24,
+        "atomic_mass": 52,
+        
+        "group_no": 6,
+        "period_no": 4,
+        "color": "steel-gray",
+        "state": "solid",
+        "characteristics": "Used in stainless steel, plating, and pigments, known for its corrosion resistance.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Louis Nicolas Vauquelin in 1797. Named from the Greek 'chroma', meaning color, due to its various colorful compounds."
+    },
+    {
+        "symbol": "Mn",
+        "name": "Manganese",
+        "atomic_no": 25,
+        "atomic_mass": 55,
+        
+        "group_no": 7,
+        "period_no": 4,
+        "color": "silvery-gray",
+        "state": "solid",
+        "characteristics": "Used in steel production, batteries, and as a catalyst in various chemical reactions.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Johann Gottlieb Gahn in 1774. Named from the Latin 'manganese', which may come from the Greek 'mangnes' for magnet."
+    },
+    {
+        "symbol": "Fe",
+        "name": "Iron",
+        "atomic_no": 26,
+        "atomic_mass": 56,
+        
+        "group_no": 8,
+        "period_no": 4,
+        "color": "silvery-gray",
+        "state": "solid",
+        "characteristics": "Essential for blood oxygen transport, used in construction, machinery, and tools.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Known since ancient times. Named from the Anglo-Saxon 'iren'. Its discovery dates back to prehistorical times when it was used to make tools and weapons."
+    },
+    {
+        "symbol": "Co",
+        "name": "Cobalt",
+        "atomic_no": 27,
+        "atomic_mass": 59,
+        
+        "group_no": 9,
+        "period_no": 4,
+        "color": "silver-blue",
+        "state": "solid",
+        "characteristics": "Used in alloys, batteries, and pigments, known for its high-temperature strength and corrosion resistance.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Georg Brandt in 1735. Named from the German 'kobalt', meaning goblin or evil spirit, because of the difficulty in extracting it from ores."
+    },
+    {
+        "symbol": "Ni",
+        "name": "Nickel",
+        "atomic_no": 28,
+        "atomic_mass": 59,
+        
+        "group_no": 10,
+        "period_no": 4,
+        "color": "silver-white",
+        "state": "solid",
+        "characteristics": "Used in stainless steel, batteries, and as a catalyst, known for its corrosion resistance and magnetic properties.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Axel Fredrik Cronstedt in 1751. Named from the German 'kupfernickel', meaning false copper, due to its similarity to copper ores."
+    },
+    {
+        "symbol": "Cu",
+        "name": "Copper",
+        "atomic_no": 29,
+        "atomic_mass": 64,
+        
+        "group_no": 11,
+        "period_no": 4,
+        "color": "reddish-brown",
+        "state": "solid",
+        "characteristics": "Highly conductive, used in electrical wiring, plumbing, and as a component in alloys such as bronze.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Known since ancient times. Name derived from the Latin 'cuprum' from Cyprus, where it was extensively mined in antiquity."
+    },
+    {
+        "symbol": "Zn",
+        "name": "Zinc",
+        "atomic_no": 30,
+        "atomic_mass": 65,
+        
+        "group_no": 12,
+        "period_no": 4,
+        "color": "bluish-silver",
+        "state": "solid",
+        "characteristics": "Used in galvanization, alloys, and as a dietary supplement, known for its corrosion resistance.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Andreas Marggraf in 1746. Named from the German 'zink', meaning 'tooth', referring to the metal's granular appearance."
+    },
+    {
+        "symbol": "Ga",
+        "name": "Gallium",
+        "atomic_no": 31,
+        "atomic_mass": 70,
+        
+        "group_no": 13,
+        "period_no": 4,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Melts just above room temperature, used in electronics, LEDs, and as a component in alloys.",
+        "noble": 0,
+        "classification": "Post-transition Metal",
+        "description": "Discovered by Paul-Émile Lecoq de Boisbaudran in 1875. Named after France (Gallia in Latin)."
+    },
+    {
+        "symbol": "Ge",
+        "name": "Germanium",
+        "atomic_no": 32,
+        "atomic_mass": 73,
+        
+        "group_no": 14,
+        "period_no": 4,
+        "color": "silvery-gray",
+        "state": "solid",
+        "characteristics": "Semiconductor used in electronics and fiber optics.",
+        "noble": 0,
+        "classification": "Metalloid",
+        "description": "Discovered by Clemens Winkler in 1886. Named from the Latin 'Germania', meaning Germany."
+    },
+    {
+        "symbol": "As",
+        "name": "Arsenic",
+        "atomic_no": 33,
+        "atomic_mass": 75,
+        
+        "group_no": 15,
+        "period_no": 4,
+        "color": "gray",
+        "state": "solid",
+        "characteristics": "Toxic element used in pesticides and semiconductors.",
+        "noble": 0,
+        "classification": "Metalloid",
+        "description": "Known since ancient times. Name derived from the Greek 'arsenikon' meaning 'potent'."
+    },
+    {
+        "symbol": "Se",
+        "name": "Selenium",
+        "atomic_no": 34,
+        "atomic_mass": 79,
+        
+        "group_no": 16,
+        "period_no": 4,
+        "color": "gray",
+        "state": "solid",
+        "characteristics": "Used in photocopiers and solar cells, has antioxidant properties.",
+        "noble": 0,
+        "classification": "Metalloid",
+        "description": "Discovered by Jakob Berzelius in 1817. Named from the Greek 'selene', meaning 'moon'."
+    },
+    {
+        "symbol": "Br",
+        "name": "Bromine",
+        "atomic_no": 35,
+        "atomic_mass": 80,
+        
+        "group_no": 17,
+        "period_no": 4,
+        "color": "red-brown",
+        "state": "liquid",
+        "characteristics": "Used in disinfectants and flame retardants, known for its corrosive properties.",
+        "noble": 0,
+        "classification": "Halogen",
+        "description": "Discovered by Antoine Jérôme Balard in 1826. Named from the Greek 'bromos', meaning 'stench'."
+    },
+    {
+        "symbol": "Kr",
+        "name": "Krypton",
+        "atomic_no": 36,
+        "atomic_mass": 84,
+        
+        "group_no": 18,
+        "period_no": 4,
+        "color": "colorless",
+        "state": "gas",
+        "characteristics": "Used in lighting and high-performance windows.",
+        "noble": 1,
+        "classification": "Noble Gas",
+        "description": "Discovered by William Ramsay and Morris Travers in 1898. Named from the Greek 'kryptos', meaning 'hidden'."
+    },
+    {
+        "symbol": "Rb",
+        "name": "Rubidium",
+        "atomic_no": 37,
+        "atomic_mass": 85,
+        
+        "group_no": 1,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in research, atomic clocks, and as a component in certain glasses.",
+        "noble": 0,
+        "classification": "Alkali Metal",
+        "description": "Discovered by Robert Bunsen and Gustav Kirchhoff in 1861. Named from the Latin 'rubidus', meaning 'deep red'."
+    },
+    {
+        "symbol": "Sr",
+        "name": "Strontium",
+        "atomic_no": 38,
+        "atomic_mass": 87,
+        
+        "group_no": 2,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in fireworks, magnets, and in some medical treatments.",
+        "noble": 0,
+        "classification": "Alkaline Earth Metal",
+        "description": "Discovered by William Cruickshank in 1790. Named after Strontian, a village in Scotland."
+    },
+    {
+        "symbol": "Y",
+        "name": "Yttrium",
+        "atomic_no": 39,
+        "atomic_mass": 89,
+        
+        "group_no": 3,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in phosphors for LEDs and in superconductors.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Johan Gadolin in 1794. Named after Ytterby, a village in Sweden."
+    },
+    {
+        "symbol": "Zr",
+        "name": "Zirconium",
+        "atomic_no": 40,
+        "atomic_mass": 91,
+        
+        "group_no": 4,
+        "period_no": 5,
+        "color": "silvery-gray",
+        "state": "solid",
+        "characteristics": "Used in nuclear reactors, ceramics, and as a refractory material.",
+        "noble": 0,
+        "classification": "Transition Metal",
+        "description": "Discovered by Martin Heinrich Klaproth in 1789. Named from the Arabic 'zarqūn', meaning 'cinnabar'."
+    },
+    {
+        "symbol": "Nb",
+        "name": "Niobium",
+        "atomic_no": 41,
+        "atomic_mass": 93,
+        
+        "group_no": 5,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in superconductors",
+        "noble": 0
+    },
+        {
+        "symbol": "Mo",
+        "name": "Molybdenum",
+        "atomic_no": 42,
+        "atomic_mass": 96,
+        
+        "group_no": 6,
+        "period_no": 5,
+        "color": "steel-grey",
+        "state": "solid",
+        "characteristics": "Used in steel alloys and catalysts",
+        "noble": 0
+    },
+    {
+        "symbol": "Tc",
+        "name": "Technetium",
+        "atomic_no": 43,
+        "atomic_mass": 98,
+        
+        "group_no": 7,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in medical imaging",
+        "noble": 0
+    },
+    {
+        "symbol": "Ru",
+        "name": "Ruthenium",
+        "atomic_no": 44,
+        "atomic_mass": 101,
+        
+        "group_no": 8,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in electrical contacts and catalysts",
+        "noble": 0
+    },
+    {
+        "symbol": "Rh",
+        "name": "Rhodium",
+        "atomic_no": 45,
+        "atomic_mass": 103,
+        
+        "group_no": 9,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in catalytic converters",
+        "noble": 0
+    },
+    {
+        "symbol": "Pd",
+        "name": "Palladium",
+        "atomic_no": 46,
+        "atomic_mass": 106,
+        
+        "group_no": 10,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in jewelry and catalytic converters",
+        "noble": 0
+    },
+    {
+        "symbol": "Ag",
+        "name": "Silver",
+        "atomic_no": 47,
+        "atomic_mass": 108,
+        
+        "group_no": 11,
+        "period_no": 5,
+        "color": "silver",
+        "state": "solid",
+        "characteristics": "Used in jewelry and electronics",
+        "noble": 0
+    },
+    {
+        "symbol": "Cd",
+        "name": "Cadmium",
+        "atomic_no": 48,
+        "atomic_mass": 112,
+        
+        "group_no": 12,
+        "period_no": 5,
+        "color": "bluish-white",
+        "state": "solid",
+        "characteristics": "Used in batteries and coatings",
+        "noble": 0
+    },
+    {
+        "symbol": "In",
+        "name": "Indium",
+        "atomic_no": 49,
+        "atomic_mass": 115,
+        
+        "group_no": 13,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in touchscreens and LCDs",
+        "noble": 0
+    },
+    {
+        "symbol": "Sn",
+        "name": "Tin",
+        "atomic_no": 50,
+        "atomic_mass": 119,
+        
+        "group_no": 14,
+        "period_no": 5,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in coatings and alloys",
+        "noble": 0
+    },
+    {
+        "symbol": "Sb",
+        "name": "Antimony",
+        "atomic_no": 51,
+        "atomic_mass": 122,
+        
+        "group_no": 15,
+        "period_no": 5,
+        "color": "silver-grey",
+        "state": "solid",
+        "characteristics": "Used in semiconductors and alloys",
+        "noble": 0
+    },
+    {
+        "symbol": "Te",
+        "name": "Tellurium",
+        "atomic_no": 52,
+        "atomic_mass": 127,
+        
+        "group_no": 16,
+        "period_no": 5,
+        "color": "silver-white",
+        "state": "solid",
+        "characteristics": "Used in alloys and electronics",
+        "noble": 0
+    },
+    {
+        "symbol": "I",
+        "name": "Iodine",
+        "atomic_no": 53,
+        "atomic_mass": 127,
+        
+        "group_no": 17,
+        "period_no": 5,
+        "color": "purple",
+        "state": "solid",
+        "characteristics": "Used in disinfectants and medicine",
+        "noble": 0
+    },
+    {
+        "symbol": "Xe",
+        "name": "Xenon",
+        "atomic_no": 54,
+        "atomic_mass": 131,
+        
+        "group_no": 18,
+        "period_no": 5,
+        "color": "colorless",
+        "state": "gas",
+        "characteristics": "Used in lighting and anesthesia",
+        "noble": 1
+    },
+    {
+        "symbol": "Cs",
+        "name": "Cesium",
+        "atomic_no": 55,
+        "atomic_mass": 133,
+        
+        "group_no": 1,
+        "period_no": 6,
+        "color": "golden",
+        "state": "solid",
+        "characteristics": "Used in atomic clocks",
+        "noble": 0
+    },
+    {
+        "symbol": "Ba",
+        "name": "Barium",
+        "atomic_no": 56,
+        "atomic_mass": 137,
+        
+        "group_no": 2,
+        "period_no": 6,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in X-ray imaging",
+        "noble": 0
+    },
+    {
+        "symbol": "La",
+        "name": "Lanthanum",
+        "atomic_no": 57,
+        "atomic_mass": 139,
+        
+        "group_no": 3,
+        "period_no": 6,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in optical glass and catalysts",
+        "noble": 0
+    },
+    {
+        "symbol": "Ce",
+        "name": "Cerium",
+        "atomic_no": 58,
+        "atomic_mass": 140,
+        
+        "group_no": 4,
+        "period_no": 6,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in catalytic converters and glass",
+        "noble": 0
+    },
+    {
+        "symbol": "Pr",
+        "name": "Praseodymium",
+        "atomic_no": 59,
+        "atomic_mass": 141,
+        
+        "group_no": 3,
+        "period_no": 6,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in magnets and lasers",
+        "noble": 0
+    },
+    {
+        "symbol": "Nd",
+        "name": "Neodymium",
+        "atomic_no": 60,
+        "atomic_mass": 144,
+        
+        "group_no": 3,
+        "period_no": 6,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in strong magnets",
+        "noble": 0
+    },
+    {
+        "symbol": "Pm",
+        "name": "Promethium",
+        "atomic_no": 61,
+        "atomic_mass": 145,
+        
+        "group_no": 3,
+        "period_no": 6,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in luminous paint",
+        "noble": 0
+    },
+    {
+        "symbol": "Sm",
+        "name": "Samarium",
+        "atomic_no": 62,
+        "atomic_mass": 150,
+        
+        "group_no": 3,
+        "period_no": 6,
+        "color": "silvery",
+        "state": "solid",
+        "characteristics": "Used in magnets and cancer treatment",
+        "noble": 0
+    },
+   {
+    "symbol": "Eu",
+    "name": "Europium",
+    "atomic_no": 63,
+    "atomic_mass": 152,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in phosphorescent materials",
+    "noble": 0
+},
+{
+    "symbol": "Gd",
+    "name": "Gadolinium",
+    "atomic_no": 64,
+    "atomic_mass": 157,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in MRI contrast agents",
+    "noble": 0
+},
+{
+    "symbol": "Tb",
+    "name": "Terbium",
+    "atomic_no": 65,
+    "atomic_mass": 159,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in phosphors and magnets",
+    "noble": 0
+},
+{
+    "symbol": "Dy",
+    "name": "Dysprosium",
+    "atomic_no": 66,
+    "atomic_mass": 162,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in high-performance magnets",
+    "noble": 0
+},
+{
+    "symbol": "Ho",
+    "name": "Holmium",
+    "atomic_no": 67,
+    "atomic_mass": 164,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in lasers and nuclear reactors",
+    "noble": 0
+},
+{
+    "symbol": "Er",
+    "name": "Erbium",
+    "atomic_no": 68,
+    "atomic_mass": 167,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in lasers and glass",
+    "noble": 0
+},
+{
+    "symbol": "Tm",
+    "name": "Thulium",
+    "atomic_no": 69,
+    "atomic_mass": 169,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in medical imaging and lasers",
+    "noble": 0
+},
+{
+    "symbol": "Yb",
+    "name": "Ytterbium",
+    "atomic_no": 70,
+    "atomic_mass": 173,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in lasers and stainless steel",
+    "noble": 0
+},
+{
+    "symbol": "Lu",
+    "name": "Lutetium",
+    "atomic_no": 71,
+    "atomic_mass": 175,
+    
+    "group_no": 3,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in catalysts and medical imaging",
+    "noble": 0
+},
+{
+    "symbol": "Hf",
+    "name": "Hafnium",
+    "atomic_no": 72,
+    "atomic_mass": 178,
+    
+    "group_no": 4,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in nuclear reactors and alloys",
+    "noble": 0
+},
+{
+    "symbol": "Ta",
+    "name": "Tantalum",
+    "atomic_no": 73,
+    "atomic_mass": 181,
+    
+    "group_no": 5,
+    "period_no": 6,
+    "color": "blue-grey",
+    "state": "solid",
+    "characteristics": "Used in electronics and medical implants",
+    "noble": 0
+},
+{
+    "symbol": "W",
+    "name": "Tungsten",
+    "atomic_no": 74,
+    "atomic_mass": 184,
+    
+    "group_no": 6,
+    "period_no": 6,
+    "color": "steel-grey",
+    "state": "solid",
+    "characteristics": "Used in lightbulb filaments and alloys",
+    "noble": 0
+},
+{
+    "symbol": "Re",
+    "name": "Rhenium",
+    "atomic_no": 75,
+    "atomic_mass": 186,
+    
+    "group_no": 7,
+    "period_no": 6,
+    "color": "silver-grey",
+    "state": "solid",
+    "characteristics": "Used in jet engines and catalysts",
+    "noble": 0
+},
+{
+    "symbol": "Os",
+    "name": "Osmium",
+    "atomic_no": 76,
+    "atomic_mass": 190,
+    
+    "group_no": 8,
+    "period_no": 6,
+    "color": "blue-grey",
+    "state": "solid",
+    "characteristics": "Used in electrical contacts and catalysts",
+    "noble": 0
+},
+{
+    "symbol": "Ir",
+    "name": "Iridium",
+    "atomic_no": 77,
+    "atomic_mass": 192,
+    
+    "group_no": 9,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in electrical contacts and jewelry",
+    "noble": 0
+},
+{
+    "symbol": "Pt",
+    "name": "Platinum",
+    "atomic_no": 78,
+    "atomic_mass": 195,
+    
+    "group_no": 10,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in jewelry and catalytic converters",
+    "noble": 0
+},
+{
+    "symbol": "Au",
+    "name": "Gold",
+    "atomic_no": 79,
+    "atomic_mass": 197,
+    
+    "group_no": 11,
+    "period_no": 6,
+    "color": "gold",
+    "state": "solid",
+    "characteristics": "Used in jewelry and electronics",
+    "noble": 0
+},
+{
+    "symbol": "Hg",
+    "name": "Mercury",
+    "atomic_no": 80,
+    "atomic_mass": 201,
+    
+    "group_no": 12,
+    "period_no": 6,
+    "color": "silver",
+    "state": "liquid",
+    "characteristics": "Used in thermometers and batteries",
+    "noble": 0
+}, 
+{
+    "symbol": "Tl",
+    "name": "Thallium",
+    "atomic_no": 81,
+    "atomic_mass": 204,
+    
+    "group_no": 13,
+    "period_no": 6,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in electronics and optical lenses",
+    "noble": 0
+},
+{
+    "symbol": "Pb",
+    "name": "Lead",
+    "atomic_no": 82,
+    "atomic_mass": 207,
+    
+    "group_no": 14,
+    "period_no": 6,
+    "color": "grey",
+    "state": "solid",
+    "characteristics": "Used in batteries and radiation shielding",
+    "noble": 0
+},
+{
+    "symbol": "Bi",
+    "name": "Bismuth",
+    "atomic_no": 83,
+    "atomic_mass": 209,
+    
+    "group_no": 15,
+    "period_no": 6,
+    "color": "pink",
+    "state": "solid",
+    "characteristics": "Used in cosmetics and pharmaceuticals",
+    "noble": 0
+},
+{
+    "symbol": "Po",
+    "name": "Polonium",
+    "atomic_no": 84,
+    "atomic_mass": 209,
+    
+    "group_no": 16,
+    "period_no": 6,
+    "color": "metallic",
+    "state": "solid",
+    "characteristics": "Used in anti-static devices",
+    "noble": 0
+},
+{
+    "symbol": "At",
+    "name": "Astatine",
+    "atomic_no": 85,
+    "atomic_mass": 210,
+    
+    "group_no": 17,
+    "period_no": 6,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Very rare and highly radioactive",
+    "noble": 0
+},
+{
+    "symbol": "Rn",
+    "name": "Radon",
+    "atomic_no": 86,
+    "atomic_mass": 222,
+    
+    "group_no": 18,
+    "period_no": 6,
+    "color": "colorless",
+    "state": "gas",
+    "characteristics": "Used in cancer treatment and radioactive tracer",
+    "noble": 1
+},
+{
+    "symbol": "Fr",
+    "name": "Francium",
+    "atomic_no": 87,
+    "atomic_mass": 223,
+    
+    "group_no": 1,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Highly radioactive and rare",
+    "noble": 0
+},
+{
+    "symbol": "Ra",
+    "name": "Radium",
+    "atomic_no": 88,
+    "atomic_mass": 226,
+    
+    "group_no": 2,
+    "period_no": 7,
+    "color": "white",
+    "state": "solid",
+    "characteristics": "Used in luminescent paints and cancer treatment",
+    "noble": 0
+},
+{
+    "symbol": "Ac",
+    "name": "Actinium",
+    "atomic_no": 89,
+    "atomic_mass": 227,
+    
+    "group_no": 3,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in radiation therapy",
+    "noble": 0
+},
+{
+    "symbol": "Th",
+    "name": "Thorium",
+    "atomic_no": 90,
+    "atomic_mass": 232,
+    
+    "group_no": 4,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in nuclear reactors and metallurgy",
+    "noble": 0
+}, 
+
+{
+    "symbol": "Pa",
+    "name": "Protactinium",
+    "atomic_no": 91,
+    "atomic_mass": 231,
+    
+    "group_no": 5,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in nuclear research",
+    "noble": 0
+},
+{
+    "symbol": "U",
+    "name": "Uranium",
+    "atomic_no": 92,
+    "atomic_mass": 238,
+    
+    "group_no": 6,
+    "period_no": 7,
+    "color": "silver-grey",
+    "state": "solid",
+    "characteristics": "Used in nuclear fuel and weapons",
+    "noble": 0
+},
+{
+    "symbol": "Np",
+    "name": "Neptunium",
+    "atomic_no": 93,
+    "atomic_mass": 237,
+    
+    "group_no": 7,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in nuclear reactors and research",
+    "noble": 0
+},
+{
+    "symbol": "Pu",
+    "name": "Plutonium",
+    "atomic_no": 94,
+    "atomic_mass": 244,
+    
+    "group_no": 8,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in nuclear weapons and reactors",
+    "noble": 0
+},
+{
+    "symbol": "Am",
+    "name": "Americium",
+    "atomic_no": 95,
+    "atomic_mass": 243,
+    
+    "group_no": 9,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in smoke detectors and nuclear medicine",
+    "noble": 0
+},
+{
+    "symbol": "Cm",
+    "name": "Curium",
+    "atomic_no": 96,
+    "atomic_mass": 247,
+    
+    "group_no": 10,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in nuclear reactors and research",
+    "noble": 0
+},
+{
+    "symbol": "Bk",
+    "name": "Berkelium",
+    "atomic_no": 97,
+    "atomic_mass": 247,
+    
+    "group_no": 11,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Cf",
+    "name": "Californium",
+    "atomic_no": 98,
+    "atomic_mass": 251,
+    
+    "group_no": 12,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in nuclear reactors and medicine",
+    "noble": 0
+},
+{
+    "symbol": "Es",
+    "name": "Einsteinium",
+    "atomic_no": 99,
+    "atomic_mass": 252,
+    
+    "group_no": 13,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Fm",
+    "name": "Fermium",
+    "atomic_no": 100,
+    "atomic_mass": 257,
+    
+    "group_no": 14,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in nuclear research",
+    "noble": 0
+},
+{
+    "symbol": "Md",
+    "name": "Mendelevium",
+    "atomic_no": 101,
+    "atomic_mass": 258,
+    
+    "group_no": 15,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "No",
+    "name": "Nobelium",
+    "atomic_no": 102,
+    "atomic_mass": 259,
+    
+    "group_no": 16,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Lr",
+    "name": "Lawrencium",
+    "atomic_no": 103,
+    "atomic_mass": 262,
+    
+    "group_no": 17,
+    "period_no": 7,
+    "color": "silvery",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Rf",
+    "name": "Rutherfordium",
+    "atomic_no": 104,
+    "atomic_mass": 267,
+    
+    "group_no": 4,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Db",
+    "name": "Dubnium",
+    "atomic_no": 105,
+    "atomic_mass": 270,
+    
+    "group_no": 5,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Sg",
+    "name": "Seaborgium",
+    "atomic_no": 106,
+    "atomic_mass": 271,
+    
+    "group_no": 6,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Bh",
+    "name": "Bohrium",
+    "atomic_no": 107,
+    "atomic_mass": 270,
+    
+    "group_no": 7,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Hs",
+    "name": "Hassium",
+    "atomic_no": 108,
+    "atomic_mass": 277,
+    
+    "group_no": 8,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Mt",
+    "name": "Meitnerium",
+    "atomic_no": 109,
+    "atomic_mass": 278,
+    
+    "group_no": 9,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Ds",
+    "name": "Darmstadtium",
+    "atomic_no": 110,
+    "atomic_mass": 281,
+    
+    "group_no": 10,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Rg",
+    "name": "Roentgenium",
+    "atomic_no": 111,
+    "atomic_mass": 282,
+    
+    "group_no": 11,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Cn",
+    "name": "Copernicium",
+    "atomic_no": 112,
+    "atomic_mass": 285,
+    
+    "group_no": 12,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Nh",
+    "name": "Nihonium",
+    "atomic_no": 113,
+    "atomic_mass": 286,
+    
+    "group_no": 13,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Fl",
+    "name": "Flerovium",
+    "atomic_no": 114,
+    "atomic_mass": 289,
+    
+    "group_no": 14,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Mc",
+    "name": "Moscovium",
+    "atomic_no": 115,
+    "atomic_mass": 290,
+    
+    "group_no": 15,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Lv",
+    "name": "Livermorium",
+    "atomic_no": 116,
+    "atomic_mass": 293,
+    
+    "group_no": 16,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Ts",
+    "name": "Tennessine",
+    "atomic_no": 117,
+    "atomic_mass": 294,
+    
+    "group_no": 17,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "solid",
+    "characteristics": "Used in scientific research",
+    "noble": 0
+},
+{
+    "symbol": "Og",
+    "name": "Oganesson",
+    "atomic_no": 118,
+    "atomic_mass": 295,
+    
+    "group_no": 18,
+    "period_no": 7,
+    "color": "unknown",
+    "state": "unknown",
+    "characteristics": "Used in scientific research",
+    "noble": 1
+}];
+
+
+        function getRandomElement() {
+            return allElements[Math.floor(Math.random() * allElements.length)];
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function showSection(sectionNumber) {
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(`section${sectionNumber}`).classList.add('active');
+            updateProgressBar(sectionNumber);
+        }
+
+        function updateProgressBar(sectionNumber) {
+            const progress = (sectionNumber - 1) * 20;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+
+        async function initializeQuiz(element = null) {
+            await fetchAllElements();
+            currentElement = element || getRandomElement();
+            document.getElementById('symbolQuestion').textContent = currentElement.symbol;
+            generateNameOptions();
+            showSection(1);
+            document.getElementById('searchContainer').style.display = 'none';
+        }
+
+        function generateNameOptions() {
+            const sameFirstLetter = allElements.filter(el => el.name[0].toLowerCase() === currentElement.name[0].toLowerCase());
+            let options = [currentElement.name];
+            
+            // Add options with the same first letter
+            while (options.length < 4 && sameFirstLetter.length > 0) {
+                const randomElement = sameFirstLetter.splice(Math.floor(Math.random() * sameFirstLetter.length), 1)[0];
+                if (randomElement.name !== currentElement.name) {
+                    options.push(randomElement.name);
+                }
+            }
+            
+            // If we still need more options, add random elements
+            while (options.length < 4) {
+                const randomElement = allElements[Math.floor(Math.random() * allElements.length)];
+                if (!options.includes(randomElement.name)) {
+                    options.push(randomElement.name);
+                }
+            }
+            
+            const shuffledOptions = shuffle(options);
+            const optionsContainer = document.getElementById('nameOptions');
+            optionsContainer.innerHTML = '';
+            shuffledOptions.forEach(name => {
+                const button = document.createElement('button');
+                button.textContent = name;
+                button.onclick = () => checkName(name);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkName(selectedName) {
+            if (selectedName === currentElement.name) {
+                document.getElementById('nameQuestion').textContent = currentElement.name;
+                document.getElementById('error1').textContent = '';
+                generateAtomicNumberOptions();
+                showSection(2);
+            } else {
+                document.getElementById('error1').textContent = 'Incorrect. Try again!';
+            }
+        }
+
+        function generateAtomicNumberOptions() {
+            const options = [
+                currentElement.atomic_no,
+                currentElement.atomic_no - 1,
+                currentElement.atomic_no + 1,
+                currentElement.atomic_no + (Math.random() > 0.5 ? 2 : -2)
+            ].map(num => Math.max(1, num));
+            
+            const shuffledOptions = shuffle([...new Set(options)]);
+            const optionsContainer = document.getElementById('atomicNumberOptions');
+            optionsContainer.innerHTML = '';
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => checkAtomicNumber(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAtomicNumber(selectedNumber) {
+            if (selectedNumber === currentElement.atomic_no) {
+                document.getElementById('nameQuestion2').textContent = currentElement.name;
+                document.getElementById('error2').textContent = '';
+                generateAtomicMassOptions();
+                showSection(3);
+            } else {
+                document.getElementById('error2').textContent = 'Incorrect. Try again!';
+            }
+        }
+
+        function generateAtomicMassOptions() {
+            const options = [
+                currentElement.atomic_mass,
+                Math.round(currentElement.atomic_mass * 0.98 * 100) / 100,
+                Math.round(currentElement.atomic_mass * 1.02 * 100) / 100,
+                Math.round(currentElement.atomic_mass * (Math.random() > 0.5 ? 1.05 : 0.95) * 100) / 100
+            ];
+            
+            const shuffledOptions = shuffle([...new Set(options)]);
+            const optionsContainer = document.getElementById('atomicMassOptions');
+            optionsContainer.innerHTML = '';
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option.toFixed(2);
+                button.onclick = () => checkAtomicMass(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAtomicMass(selectedMass) {
+            if (Math.abs(selectedMass - currentElement.atomic_mass) < 0.01) {
+                document.getElementById('nameQuestion3').textContent = currentElement.name;
+                document.getElementById('error3').textContent = '';
+                generateGroupPeriodOptions();
+                showSection(4);
+            } else {
+                document.getElementById('error3').textContent = 'Incorrect. Try again!';
+            }
+        }
+
+        function generateGroupPeriodOptions() {
+            const options = [
+                { group: currentElement.group_no, period: currentElement.period_no },
+                { group: currentElement.group_no + 1, period: currentElement.period_no },
+                { group: currentElement.group_no, period: currentElement.period_no + 1 },
+                { group: currentElement.group_no - 1, period: currentElement.period_no }
+            ].map(option => ({
+                group: Math.max(1, Math.min(18, option.group)),
+                period: Math.max(1, Math.min(7, option.period))
+            }));
+            
+            const shuffledOptions = shuffle([...new Set(options.map(JSON.stringify))].map(JSON.parse));
+            const optionsContainer = document.getElementById('groupPeriodOptions');
+            optionsContainer.innerHTML = '';
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = `Group ${option.group}, Period ${option.period}`;
+                button.onclick = () => checkGroupPeriod(option.group, option.period);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkGroupPeriod(groupNo, periodNo) {
+            if (groupNo === currentElement.group_no && periodNo === currentElement.period_no) {
+                document.getElementById('nameQuestion4').textContent = currentElement.name;
+                document.getElementById('error4').textContent = '';
+                generateValencyOptions();
+                showSection(5);
+            } else {
+                document.getElementById('error4').textContent = 'Incorrect. ry again!';
+            }
+        }
+
+        function generateValencyOptions() {
+    const options = [0, 1, 2, 3, 4];
+    
+    const shuffledOptions = shuffle(options);
+    const optionsContainer = document.getElementById('valencyOptions');
+    optionsContainer.innerHTML = '';
+    
+    shuffledOptions.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.onclick = () => checkValency(option);
+        optionsContainer.appendChild(button);
+    });
+}
+
+        function checkValency(selectedValency) {
+            if (selectedValency === currentElement.valency) {
+                document.getElementById('error5').textContent = '';
+                showSection('6');
+            } else {
+                document.getElementById('error5').textContent = 'Incorrect. Try again!';
+            }
+        }
+
+function showSearch() {
+    document.getElementById('searchContainer').style.display = 'block';
+    document.getElementById('randomButton').style.display = 'inline-block';
+    document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+}
+
+function searchElements() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const results = allElements.filter(element => 
+        element.name.toLowerCase().includes(searchTerm) ||
+        element.symbol.toLowerCase().includes(searchTerm)
+    );
+    displaySearchResults(results);
+}
+
+function displaySearchResults(results) {
+    const resultsContainer = document.getElementById('searchResults');
+    resultsContainer.innerHTML = '';
+    results.forEach(element => {
+        const div = document.createElement('div');
+        div.className = 'searchResult';
+        div.textContent = `${element.name} (${element.symbol})`;
+        div.onclick = () => initializeQuiz(element);
+        resultsContainer.appendChild(div);
+    });
+}
+
+function startRandomQuiz() {
+    initializeQuiz(getRandomElement());
+}
+
+function generateOptions(correctAnswer, optionsGenerator) {
+    let options = [correctAnswer];
+    while (options.length < 4) {
+        const newOption = optionsGenerator();
+        if (!options.includes(newOption)) {
+            options.push(newOption);
+        }
+    }
+    return shuffle(options);
+}
+
+function generateNameOptions() {
+    const sameFirstLetter = allElements.filter(el => el.name[0].toLowerCase() === currentElement.name[0].toLowerCase() && el.name !== currentElement.name);
+    const options = generateOptions(currentElement.name, () => {
+        if (sameFirstLetter.length > 0 && Math.random() < 0.7) {
+            return sameFirstLetter.splice(Math.floor(Math.random() * sameFirstLetter.length), 1)[0].name;
+        } else {
+            return allElements[Math.floor(Math.random() * allElements.length)].name;
+        }
+    });
+    
+    const optionsContainer = document.getElementById('nameOptions');
+    optionsContainer.innerHTML = '';
+    options.forEach(name => {
+        const button = document.createElement('button');
+        button.textContent = name;
+        button.onclick = () => checkName(name);
+        optionsContainer.appendChild(button);
+    });
+}
+
+function generateAtomicNumberOptions() {
+    const options = generateOptions(currentElement.atomic_no, () => {
+        let num = currentElement.atomic_no + Math.floor(Math.random() * 5) - 2;
+        return Math.max(1, num);
+    });
+    
+    const optionsContainer = document.getElementById('atomicNumberOptions');
+    optionsContainer.innerHTML = '';
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.onclick = () => checkAtomicNumber(option);
+        optionsContainer.appendChild(button);
+    });
+}
+
+function generateAtomicMassOptions() {
+    const options = generateOptions(currentElement.atomic_mass, () => {
+        return Math.round(currentElement.atomic_mass * (0.95 + Math.random() * 0.1) * 100) / 100;
+    });
+    
+    const optionsContainer = document.getElementById('atomicMassOptions');
+    optionsContainer.innerHTML = '';
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option.toFixed(2);
+        button.onclick = () => checkAtomicMass(option);
+        optionsContainer.appendChild(button);
+    });
+}
+
+function generateGroupPeriodOptions() {
+    const options = generateOptions(
+        { group: currentElement.group_no, period: currentElement.period_no },
+        () => ({
+            group: Math.max(1, Math.min(18, currentElement.group_no + Math.floor(Math.random() * 3) - 1)),
+            period: Math.max(1, Math.min(7, currentElement.period_no + Math.floor(Math.random() * 3) - 1))
+        })
+    );
+    
+    const optionsContainer = document.getElementById('groupPeriodOptions');
+    optionsContainer.innerHTML = '';
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = `Group ${option.group}, Period ${option.period}`;
+        button.onclick = () => checkGroupPeriod(option.group, option.period);
+        optionsContainer.appendChild(button);
+    });
+}
+
+function generateValencyOptions() {
+    const correctValency = currentElement.valency;
+
+    // Generate 3 incorrect options within the range of 0-4
+    const incorrectOptions = [];
+    while (incorrectOptions.length < 3) {
+        const randomValency = Math.floor(Math.random() * 5);
+        if (randomValency !== correctValency && !incorrectOptions.includes(randomValency)) {
+            incorrectOptions.push(randomValency);
+        }
+    }
+
+    // Combine the correct option with the incorrect ones
+    const options = [correctValency, ...incorrectOptions];
+
+    // Shuffle the options
+    const shuffledOptions = shuffle(options);
+    
+    // Display the shuffled options as buttons
+    const optionsContainer = document.getElementById('valencyOptions');
+    optionsContainer.innerHTML = '';
+    shuffledOptions.forEach(option => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.onclick = () => checkValency(option);
+        optionsContainer.appendChild(button);
+    });
+}
+
+function checkValency(selectedValency) {
+    if (selectedValency === currentElement.valency) {
+        document.getElementById('error5').textContent = '';
+        showSection('6');
+    } else {
+        document.getElementById('error5').textContent = 'Incorrect. Try again!';
+    }
+}
+
+// Event listeners
+document.getElementById('searchButton').addEventListener('click', searchElements);
+document.getElementById('searchInput').addEventListener('input', searchElements);
+document.getElementById('randomButton').addEventListener('click', startRandomQuiz);
+
+// Initialize the quiz when the page loads
+fetchAllElements().then(() => {
+    showSearch();
+});
+  
+  </script>
+
+     <script>
+        (function () { 
+            var script = document.createElement('script'); 
+            script.src = "//cdn.jsdelivr.net/npm/eruda"; 
+            document.body.appendChild(script); 
+            script.onload = function () { 
+                eruda.init(); 
+            } 
+        })();
+    </script>
+</body>
+</html>
