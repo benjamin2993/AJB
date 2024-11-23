@@ -1,89 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spotmate Track Data</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      padding: 20px;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-    h1 {
-      color: #4CAF50;
-    }
-    input, button {
-      padding: 10px;
-      margin: 5px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .response {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      background-color: #fff;
-      border-radius: 4px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify MP3 Downloader</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        iframe {
+            width: 90%;
+            height: 90%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-  <h1>Fetch Track Data</h1>
-  <label for="spotify-url">Enter Spotify Track URL:</label>
-  <input type="text" id="spotify-url" placeholder="https://open.spotify.com/track/...">
-  <button id="fetch-data">Fetch Data</button>
-  <div id="response" class="response"></div>
-
-  <script>
-    document.getElementById('fetch-data').addEventListener('click', async () => {
-      const spotifyUrl = document.getElementById('spotify-url').value;
-      if (!spotifyUrl) {
-        alert('Please enter a valid Spotify URL!');
-        return;
-      }
-
-      const endpoint = 'https://spotmate.online/getTrackData';
-      const csrfToken = 'ALNeMNZZbGYAZRHvBphTOicYkSKNdHD0Z78jbQuo';
-      const cookies = `XSRF-TOKEN=eyJpdiI6IjlJWmx6OTFlbHZzeGxJZTl6dUhqbXc9PSIsInZhbHVlIjoid...`; // Use actual cookies
-      const headers = {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken,
-        'Cookie': cookies,
-        'Origin': 'https://spotmate.online',
-        'Referer': 'https://spotmate.online/',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36'
-      };
-
-      try {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: headers,
-          body: JSON.stringify({ spotify_url: spotifyUrl })
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          document.getElementById('response').textContent = JSON.stringify(data, null, 2);
-        } else {
-          document.getElementById('response').textContent = `Error: ${response.status} - ${response.statusText}`;
-        }
-      } catch (error) {
-        document.getElementById('response').textContent = `Request failed: ${error.message}`;
-      }
-    });
-  </script>
+    <h1>Spotify MP3 Downloader</h1>
+    <iframe src="https://spotifymp3.com/"></iframe>
 </body>
 </html>
