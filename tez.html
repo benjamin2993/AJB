@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt JSON</title>
+    <script>
+        async function base64ToArrayBuffer(base64) {
+            const binary_string = window.atob(base64);
+            const len = binary_string.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        async function decryptAes(contentBase64, key) {
+            const keyBuffer = new TextEncoder().encode(key);  // Convert the key to a buffer
+            const keyCrypto = await window.crypto.subtle.importKey(
+                'raw', keyBuffer, { name: 'AES-ECB' }, false, ['decrypt']
+            );
+
+            const contentBuffer = await base64ToArrayBuffer(contentBase64); // Convert base64 content to ArrayBuffer
+
+            // Decrypt the content
+            const decryptedBuffer = await window.crypto.subtle.decrypt(
+                { name: 'AES-ECB' }, keyCrypto, contentBuffer
+            );
+
+            const decryptedText = new TextDecoder().decode(decryptedBuffer);  // Decode buffer to text
+            return decryptedText;
+        }
+
+        async function loadAndDecryptJson() {
+            const response = await fetch('https://benjamin2993.github.io/AJB/SST/HISTORY/1.json');
+            const json = await response.json();
+
+            const encryptedContent = json.content;  // Assuming 'content' is the encrypted base64 string
+
+            const key = 'SixteenByteKey!!'; // AES Key (same as Python)
+            
+            try {
+                const decryptedJson = await decryptAes(encryptedContent, key);
+                const parsedJson = JSON.parse(decryptedJson);  // Parse the decrypted JSON
+                document.getElementById('jsonOutput').textContent = JSON.stringify(parsedJson, null, 2);
+            } catch (error) {
+                document.getElementById('jsonOutput').textContent = 'Error decrypting content: ' + error.message;
+            }
+        }
+
+        window.onload = loadAndDecryptJson;
+    </script>
+</head>
+<body>
+    <h1>Decrypted JSON Output</h1>
+    <pre id="jsonOutput">Loading...</pre>
+</body>
+</html>
