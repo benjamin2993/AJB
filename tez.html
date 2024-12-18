@@ -43,7 +43,7 @@
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
-                const json = await response.json();
+                const json = await response.text();
                 const encryptedContent = json.content;
 
                 console.log('Encrypted Content:', encryptedContent);
