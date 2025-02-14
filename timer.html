@@ -42,9 +42,18 @@
         }
 
         /* Best of Luck message */
+        #bestOfLuck {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* Message after countdown ends */
         #message {
             display: none;
-            font-size: 2em;
+            font-size: 2.5em;
             font-weight: bold;
             text-transform: uppercase;
             background: rgba(255, 255, 255, 0.2);
@@ -72,7 +81,7 @@
             h1 {
                 font-size: 2em;
             }
-            #timer, #message {
+            #timer, #message, #bestOfLuck {
                 font-size: 2em;
                 padding: 15px 30px;
             }
@@ -82,8 +91,9 @@
 <body>
 
     <h1>Countdown to HSLC 2025</h1>
+    <div id="bestOfLuck">✨ Best of Luck for HSLC 2025! ✨</div>
     <div id="timer">Loading...</div>
-    <div id="message">🎉 Best of Luck for Your Exam! 🎉</div>
+    <div id="message">🎉 You Got This! 🎉</div>
 
     <script>
         function updateTimer() {
