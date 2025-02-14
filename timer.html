@@ -3,16 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countdown Timer</title>
+    <title>Countdown to HSLC 2025</title>
     <style>
+        /* Gradient background */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
-            margin-top: 20%;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
         }
+
+        /* Main heading */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* Countdown container */
         #timer {
-            font-size: 2em;
+            font-size: 3em;
             font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            #timer {
+                font-size: 2.5em;
+                padding: 15px 30px;
+            }
         }
     </style>
 </head>
@@ -23,13 +72,8 @@
 
     <script>
         function updateTimer() {
-            // Set target time (9 AM, 15 February 2025)
             const targetDate = new Date("2025-02-15T09:00:00");
-
-            // Get current time
             const now = new Date();
-
-            // Calculate the time difference in milliseconds
             const diff = targetDate - now;
 
             if (diff <= 0) {
@@ -37,24 +81,21 @@
                 return;
             }
 
-            // Convert milliseconds into days, hours, minutes, and seconds
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            // Display the countdown
             document.getElementById("timer").innerHTML = 
                 `${days.toString().padStart(2, '0')}:
                  ${hours.toString().padStart(2, '0')}:
                  ${minutes.toString().padStart(2, '0')}:
                  ${seconds.toString().padStart(2, '0')}`;
 
-            // Update every second
             setTimeout(updateTimer, 1000);
         }
 
-        updateTimer(); // Start the countdown
+        updateTimer();
     </script>
 
 </body>
